@@ -17,9 +17,6 @@ namespace Lykke.Service.Dwh.Settings
         [AzureTableCheck]
         public string LogsConnString { get; set; }
 
-        [SqlCheck]
-        public string SqlConnectionString { get; set; }
-
         public Dictionary<string, string> SqlConnection { get; set; }
     }
 }
