@@ -6,6 +6,8 @@ namespace Lykke.Service.Dwh.Client
     {
         ResponceDataSet Get();
 
-        ResponceDataSet Call(Dictionary<string, string> parameters);
+        ResponceDataSet Call(Dictionary<string, string> parameters, string procname);
+
+        ResponceDataSet Call(Dictionary<string, string> parameters, string procname, string database);
     }
 }

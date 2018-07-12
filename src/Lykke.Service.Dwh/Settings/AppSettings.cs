@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 using Lykke.Sdk.Settings;
 using Lykke.SettingsReader.Attributes;
 
@@ -18,5 +19,7 @@ namespace Lykke.Service.Dwh.Settings
 
         [SqlCheck]
         public string SqlConnectionString { get; set; }
+
+        public Dictionary<string, string> SqlConnection { get; set; }
     }
 }

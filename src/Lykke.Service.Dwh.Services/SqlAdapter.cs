@@ -9,29 +9,38 @@ namespace Lykke.Service.Dwh.Services
 {
     public class SqlAdapter : ISqlAdapter
     {
-        private const string _spNameParam = "spname";
-        private const string _formatParam = "format";
+        public const string SpNameParam = "spname";
+        public const string FormatParam = "format";
+        public const string DatabaseParam = "database";
 
-        private readonly string _connectionString;
+        public const string DefaultDataBase = "dwh";
 
-        public string StoredProcedureParamName => _spNameParam;
+        private readonly IReadOnlyDictionary<string, string> _connectionString;
 
-        public SqlAdapter(string connectionString)
+        public string StoredProcedureParamName => SpNameParam;
+
+        public SqlAdapter(IReadOnlyDictionary<string, string> connectionStrings)
         {
-            _connectionString = connectionString;
+            _connectionString = connectionStrings;
         }
 
         public void CallStoredProcedureAndFillDataSet(Dictionary<string, StringValues> parameters, DataSet dataSet)
         {
-            using (var connection = new SqlConnection(_connectionString))
+
+            if (!parameters.TryGetValue(DatabaseParam, out var database))
+            {
+                database = DefaultDataBase;
+            }
+
+            using (var connection = new SqlConnection(_connectionString[database]))
             using (var command = connection.CreateCommand())
             {
                 connection.Open();
-                command.CommandText = parameters[_spNameParam];
+                command.CommandText = parameters[SpNameParam];
                 command.CommandType = CommandType.StoredProcedure;
                 foreach (var param in parameters)
                 {
-                    if (param.Key != _spNameParam && param.Key != _formatParam)
+                    if (param.Key != SpNameParam && param.Key != FormatParam)
                         command.Parameters.AddWithValue("@" + param.Key, param.Value.First());
                 }
                 SqlDataAdapter theDataAdapter = new SqlDataAdapter(command);

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Primitives;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Lykke.Service.Dwh.Client;
 using Lykke.Service.Dwh.Core.Services;
+using Lykke.Service.Dwh.Services;
 
 namespace Lykke.Service.Dwh.Controllers
 {
@@ -35,14 +36,32 @@ namespace Lykke.Service.Dwh.Controllers
         }
 
         /// <summary>
-        /// Method Call the Stored Procedure from Configured Database
+        /// Method Call the Stored Procedure from default Database (dwh)
         /// </summary>
-        /// <param name="parameters">Dictionary with key-value pairs could contain at list spname parameter with stored procedure name</param>
+        /// <param name="parameters">Dictionary with key-value pairs - parameters</param>
+        /// <param name="procname">stored procedure name</param>
         /// <returns></returns>
         [SwaggerOperation("Call")]
-        [HttpPost("call")]
-        public ResponceDataSet Call([FromBody] Dictionary<string, string> parameters)
+        [HttpPost("call/{procname}")]
+        public ResponceDataSet Call([FromBody] Dictionary<string, string> parameters, string procname)
         {
+            parameters[SqlAdapter.SpNameParam] = procname;
+            return Process(parameters.ToDictionary(i => i.Key, i => new StringValues(i.Value)));
+        }
+
+        /// <summary>
+        /// Method Call the Stored Procedure from selected Database
+        /// </summary>
+        /// <param name="parameters">Dictionary with key-value pairs - parameters</param>
+        /// <param name="procname">stored procedure name</param>
+        /// <param name="database">database name (name from service config)</param>
+        /// <returns></returns>
+        [SwaggerOperation("Call")]
+        [HttpPost("call/{procname}/{database}")]
+        public ResponceDataSet Call([FromBody] Dictionary<string, string> parameters, string procname, string database)
+        {
+            parameters[SqlAdapter.SpNameParam] = procname;
+            parameters[SqlAdapter.DatabaseParam] = database;
             return Process(parameters.ToDictionary(i => i.Key, i => new StringValues(i.Value)));
         }
 
@@ -61,5 +80,6 @@ namespace Lykke.Service.Dwh.Controllers
 
             return responce;
         }
+
     }
 }

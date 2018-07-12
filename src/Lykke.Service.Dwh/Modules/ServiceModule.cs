@@ -22,7 +22,7 @@ namespace Lykke.Service.Dwh.Modules
             builder.RegisterType<SqlAdapter>()
                 .As<ISqlAdapter>()
                 .SingleInstance()
-                .WithParameter("connectionString", _appSettings.CurrentValue.DwhService.SqlConnectionString);
+                .WithParameter("connectionStrings", _appSettings.CurrentValue.DwhService.SqlConnection);
         }
     }
 }
