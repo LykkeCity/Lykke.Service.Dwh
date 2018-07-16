@@ -16,7 +16,10 @@ namespace Lykke.Service.Dwh
         {
             return services.BuildServiceProvider<AppSettings>(options =>
             {
-                options.SwaggerOptions.ApiTitle = "Dwh API";
+                options.SwaggerOptions = new LykkeSwaggerOptions
+                {
+                    ApiTitle = "Dwh API"
+                };
                 options.Logs = logs =>
                 {
                     logs.AzureTableName = "DwhLog";
