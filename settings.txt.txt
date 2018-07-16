@@ -1,0 +1,24 @@
+{
+  "DwhService": 
+  {
+    "LogsConnString": "${DwhService-LogsConnString}",
+    "SqlConnection": 
+    {
+      "dwh": "${DWH-SqlConnString}",
+      "report": "${SqlReport-SqlConnString}"
+    }
+  },
+
+  "MonitoringServiceClient": {
+    "MonitoringServiceUrl": "${MonitoringServiceUrl}"
+  },
+
+  "SlackNotifications": {
+    "AzureQueue": {
+      "ConnectionString": "${SlackNotificationsConnString}:[AzureTableStorage]",
+      "QueueName": "slack-notifications"
+    },
+    "ThrottlingLimitSeconds": ${SlackNotificationsThrottlingLimit}
+  }
+}
+
