@@ -1,7 +1,7 @@
 {
   "DwhService": 
   {
-    "LogsConnString": "${DwhService-LogsConnString}:[azuretablestorage]",
+    "LogsConnString": "${DwhService-LogsConnString}:[AzureTableStorage]",
     "SqlConnection": 
     {
       "dwh": "${DWHSqlConnString}",
