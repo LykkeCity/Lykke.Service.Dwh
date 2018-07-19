@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using Common;
 using Common.Log;
 using Lykke.Common.Api.Contract.Responses;
@@ -40,7 +41,7 @@ namespace Lykke.Service.Dwh.Controllers
         [ProducesResponseType(typeof(ResponceDataSet), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
-        public ResponceDataSet Get()
+        public Task<ResponceDataSet> Get()
         {
             var paramsDict = QueryHelpers.ParseQuery(HttpContext.Request.Query.ToString());
 
@@ -58,7 +59,7 @@ namespace Lykke.Service.Dwh.Controllers
         [ProducesResponseType(typeof(ResponceDataSet), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
-        public ResponceDataSet Call([FromBody] Dictionary<string, string> parameters, string procname)
+        public Task<ResponceDataSet> Call([FromBody] Dictionary<string, string> parameters, string procname)
         {
             parameters[SqlAdapter.SpNameParam] = procname;
             var result =  Process(parameters.ToDictionary(i => i.Key, i => new StringValues(i.Value)));
@@ -76,14 +77,14 @@ namespace Lykke.Service.Dwh.Controllers
         [HttpPost("call/{procname}/{database}")]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.InternalServerError)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
-        public ResponceDataSet Call([FromBody] Dictionary<string, string> parameters, string procname, string database)
+        public Task<ResponceDataSet> Call([FromBody] Dictionary<string, string> parameters, string procname, string database)
         {
             parameters[SqlAdapter.SpNameParam] = procname;
             parameters[SqlAdapter.DatabaseParam] = database;
             return Process(parameters.ToDictionary(i => i.Key, i => new StringValues(i.Value)));
         }
 
-        private ResponceDataSet Process(Dictionary<string, StringValues> parameters)
+        private Task<ResponceDataSet> Process(Dictionary<string, StringValues> parameters)
         {
             try
             {
@@ -98,7 +99,7 @@ namespace Lykke.Service.Dwh.Controllers
 
                 _sqlAdapter.CallStoredProcedureAndFillDataSet(parameters, responce.Data);
 
-                return responce;
+                return Task.FromResult(responce);
             }
             catch (Exception ex)
             {

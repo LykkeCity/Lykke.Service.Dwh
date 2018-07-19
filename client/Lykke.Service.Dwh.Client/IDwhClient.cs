@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Refit;
 
 namespace Lykke.Service.Dwh.Client
@@ -6,12 +7,12 @@ namespace Lykke.Service.Dwh.Client
     public interface IDwhClient
     {
         [Post("/api/StoredProcedures")]
-        ResponceDataSet Get();
+        Task<ResponceDataSet> Get();
 
         [Post("/api/StoredProcedures/call/{procname}")]
-        ResponceDataSet Call(Dictionary<string, string> parameters, string procname);
+        Task<ResponceDataSet> Call(Dictionary<string, string> parameters, string procname);
 
         [Post("/api/StoredProcedures/call/{procname}/{database}")]
-        ResponceDataSet Call(Dictionary<string, string> parameters, string procname, string database);
+        Task<ResponceDataSet> Call(Dictionary<string, string> parameters, string procname, string database);
     }
 }
