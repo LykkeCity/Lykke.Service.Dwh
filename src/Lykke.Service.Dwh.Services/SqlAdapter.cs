@@ -27,10 +27,12 @@ namespace Lykke.Service.Dwh.Services
         public void CallStoredProcedureAndFillDataSet(Dictionary<string, StringValues> parameters, DataSet dataSet)
         {
 
-            if (!parameters.TryGetValue(DatabaseParam, out var database))
+            if (!parameters.TryGetValue(DatabaseParam, out var databaseParam))
             {
-                database = DefaultDataBase;
+                databaseParam = DefaultDataBase;
             }
+
+            var database = databaseParam.ToString();
 
             using (var connection = new SqlConnection(_connectionString[database]))
             using (var command = connection.CreateCommand())
@@ -40,7 +42,7 @@ namespace Lykke.Service.Dwh.Services
                 command.CommandType = CommandType.StoredProcedure;
                 foreach (var param in parameters)
                 {
-                    if (param.Key != SpNameParam && param.Key != FormatParam)
+                    if (param.Key != SpNameParam && param.Key != FormatParam && param.Key != DatabaseParam)
                         command.Parameters.AddWithValue("@" + param.Key, param.Value.First());
                 }
                 SqlDataAdapter theDataAdapter = new SqlDataAdapter(command);
