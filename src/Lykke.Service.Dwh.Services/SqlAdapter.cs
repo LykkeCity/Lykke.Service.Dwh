@@ -37,6 +37,7 @@ namespace Lykke.Service.Dwh.Services
             using (var connection = new SqlConnection(_connectionString[database]))
             using (var command = connection.CreateCommand())
             {
+                command.CommandTimeout = 600;
                 connection.Open();
                 command.CommandText = parameters[SpNameParam];
                 command.CommandType = CommandType.StoredProcedure;
