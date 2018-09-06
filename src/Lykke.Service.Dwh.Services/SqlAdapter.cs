@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Data;
 using System.Data.SqlClient;
 using System.Collections.Generic;
@@ -43,8 +44,22 @@ namespace Lykke.Service.Dwh.Services
                 command.CommandType = CommandType.StoredProcedure;
                 foreach (var param in parameters)
                 {
-                    if (param.Key != SpNameParam && param.Key != FormatParam && param.Key != DatabaseParam)
-                        command.Parameters.AddWithValue("@" + param.Key, param.Value.First());
+                    if (param.Key == SpNameParam || param.Key == FormatParam || param.Key == DatabaseParam)
+                        continue;
+
+                    var paramName = param.Key.StartsWith('@')
+                        ? param.Key
+                        : "@" + param.Key;
+
+                    if (param.Value.Count == 0)
+                        command.Parameters.Add(
+                            new SqlParameter(paramName, DBNull.Value)
+                            {
+                                IsNullable = true,
+                                Direction = ParameterDirection.Input,
+                            });
+                    else
+                        command.Parameters.AddWithValue(paramName, param.Value.First());
                 }
                 SqlDataAdapter theDataAdapter = new SqlDataAdapter(command);
                 theDataAdapter.Fill(dataSet);

@@ -9,14 +9,13 @@ using Common.Log;
 using Lykke.Common.Api.Contract.Responses;
 using Lykke.Common.ApiLibrary.Exceptions;
 using Lykke.Common.Log;
+using Lykke.Service.Dwh.Client;
+using Lykke.Service.Dwh.Core.Services;
+using Lykke.Service.Dwh.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using Lykke.Service.Dwh.Client;
-using Lykke.Service.Dwh.Core.Services;
-using Lykke.Service.Dwh.Services;
-using Microsoft.Rest;
 
 namespace Lykke.Service.Dwh.Controllers
 {
@@ -35,7 +34,6 @@ namespace Lykke.Service.Dwh.Controllers
         /// <summary>
         /// Get Method to Call the Stored Procedure from Configured Database
         /// </summary>
-        /// <param name="parameters">Dictionary with key-value pairs could contain at list spname parameter with stored procedure name</param>
         /// <returns>Result dataSet</returns>
         [HttpPost]
         [ProducesResponseType(typeof(ResponceDataSet), (int)HttpStatusCode.OK)]
