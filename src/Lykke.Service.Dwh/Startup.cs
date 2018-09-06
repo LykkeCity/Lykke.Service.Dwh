@@ -3,7 +3,6 @@ using JetBrains.Annotations;
 using Lykke.Sdk;
 using Lykke.Service.Dwh.Settings;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Lykke.Service.Dwh
@@ -52,10 +51,6 @@ namespace Lykke.Service.Dwh
         public void Configure(IApplicationBuilder app)
         {
             app.UseLykkeConfiguration();
-
-#if DEBUG
-            TelemetryConfiguration.Active.DisableTelemetry = true;
-#endif
         }
     }
 }
