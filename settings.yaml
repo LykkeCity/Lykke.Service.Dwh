@@ -1,0 +1,23 @@
+DwhService:
+    LogsConnString:
+        settings-key: DwhService-LogsConnString
+        types:
+            - AzureTableStorage
+    SqlConnection:
+        settings-key: DwhService-SqlConnections
+        types:
+            - Json
+
+MonitoringServiceClient:
+    MonitoringServiceUrl:
+        settings-key: MonitoringServiceUrl
+
+SlackNotifications:
+    AzureQueue:
+        ConnectionString:
+            settings-key: SlackNotificationsConnString
+            types:
+                - AzureTableStorage
+        QueueName: 
+            settings-key: SlackQueueName
+
