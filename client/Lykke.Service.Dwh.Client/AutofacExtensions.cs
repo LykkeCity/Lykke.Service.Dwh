@@ -52,7 +52,7 @@ namespace Lykke.Service.Dwh.Client
 
             clientBuilder = builderConfigure?.Invoke(clientBuilder) ?? clientBuilder.WithoutRetries();
 
-            builder.RegisterInstance(clientBuilder.Create().Generate<IDwhClient>())
+            builder.RegisterInstance(clientBuilder.Create().Generate<IDwhClient>(TimeSpan.FromMinutes(3)))
                 .As<IDwhClient>()
                 .SingleInstance();
         }
