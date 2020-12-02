@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -95,7 +96,26 @@ namespace Lykke.Service.Dwh.Controllers
                     Data = new DataSet(),
                 };
 
+                var sw = new Stopwatch();
+                sw.Start();
                 _sqlAdapter.CallStoredProcedureAndFillDataSet(parameters, responce.Data);
+                sw.Stop();
+
+                var message = $"============\nResult of {parameters[SqlAdapter.SpNameParam]} ({sw.ElapsedMilliseconds} ms): ";
+                var index = 0;
+                foreach (DataTable table in responce.Data.Tables)
+                {
+                    message += $"Table {index} count={table.Rows.Count}; ";
+                }
+
+                message += "\nParams: ";
+
+                foreach (var parameter in parameters)
+                {
+                    message += $"{parameter.Key}={parameter.Value}; ";
+                }
+
+                Console.WriteLine(message);
 
                 return Task.FromResult(responce);
             }
